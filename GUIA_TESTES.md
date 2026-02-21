@@ -40,15 +40,24 @@ Se retornar uma lista (mesmo que vazia), a API está funcionando! ✅
 1. Acesse `http://localhost:5000/swagger`
 2. Expanda `POST /api/contacts`
 3. Clique em **Try it out**
-4. Cole o JSON abaixo:
+4. **IMPORTANTE:** Cole APENAS o JSON abaixo (SEM os backticks ``` ou a palavra json):
 ```json
 {
   "name": "João Silva",
   "phones": ["11987654321", "1133334444"]
 }
 ```
+   **Cole apenas isso no campo Request body:**
+   ```
+   {
+     "name": "João Silva",
+     "phones": ["11987654321", "1133334444"]
+   }
+   ```
 5. Clique em **Execute**
 6. Verifique se retorna status `201 Created` com os dados do contato
+
+**⚠️ ATENÇÃO:** Não cole os backticks (```) ou a palavra "json" - apenas o conteúdo JSON puro!
 
 **Via PowerShell:**
 ```powershell
