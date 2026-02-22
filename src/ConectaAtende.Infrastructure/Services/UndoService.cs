@@ -1,7 +1,7 @@
 using ConectaAtende.Domain.Entities;
 using ConectaAtende.Domain.Repositories;
 
-namespace ConectaAtende.Application.Services;
+namespace ConectaAtende.Infrastructure.Services;
 
 public enum UndoOperationType
 {
@@ -17,6 +17,10 @@ public class UndoOperation
     public DateTime Timestamp { get; set; }
 }
 
+/// <summary>
+/// Implementação do mecanismo de undo usando Stack (pilha LIFO).
+/// Responsabilidade na camada Infrastructure, conforme Clean Architecture.
+/// </summary>
 public class UndoService
 {
     private readonly IContactRepository _repository;
@@ -56,6 +60,8 @@ public class UndoService
             Timestamp = DateTime.UtcNow
         });
     }
+
+    public bool HasPendingOperations => _undoStack.Count > 0;
 
     public async Task<bool> UndoAsync()
     {

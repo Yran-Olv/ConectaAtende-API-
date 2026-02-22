@@ -10,18 +10,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Repositories
+// Repositories (Singleton para manter dados em memória entre requisições)
 builder.Services.AddSingleton<IContactRepository, InMemoryContactRepository>();
 builder.Services.AddSingleton<ITicketRepository, InMemoryTicketRepository>();
 
-// Services
+// Application Services
 builder.Services.AddScoped<ContactService>();
 builder.Services.AddScoped<TicketService>();
-builder.Services.AddScoped<UndoService>();
-builder.Services.AddSingleton<RecentContactsService>(sp => 
+
+// Infrastructure Services (Singleton para preservar estado entre requisições)
+builder.Services.AddSingleton<UndoService>(sp =>
+    new UndoService(sp.GetRequiredService<IContactRepository>()));
+builder.Services.AddSingleton<RecentContactsService>(sp =>
     new RecentContactsService(sp.GetRequiredService<IContactRepository>(), maxCapacity: 10));
 
-// Triage Policy
+// Triage Policy (Singleton para manter política configurada)
 builder.Services.AddSingleton<ITriagePolicyService, TriagePolicyService>();
 
 var app = builder.Build();

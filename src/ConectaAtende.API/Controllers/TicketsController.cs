@@ -42,11 +42,18 @@ public class TicketsController : ControllerBase
     [HttpPost("enqueue/{ticketId}")]
     public async Task<ActionResult<TicketDto>> Enqueue(Guid ticketId)
     {
-        var ticket = await _ticketService.EnqueueAsync(ticketId);
-        if (ticket == null)
-            return NotFound();
+        try
+        {
+            var ticket = await _ticketService.EnqueueAsync(ticketId);
+            if (ticket == null)
+                return NotFound();
 
-        return Ok(ticket);
+            return Ok(ticket);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("next")]

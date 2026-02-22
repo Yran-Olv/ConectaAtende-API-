@@ -1,5 +1,6 @@
 using ConectaAtende.Application.DTOs;
 using ConectaAtende.Application.Services;
+using ConectaAtende.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConectaAtende.API.Controllers;
@@ -109,7 +110,7 @@ public class ContactsController : ControllerBase
         _undoService.RecordDelete(existing.ToDomain());
         _recentContactsService.RemoveRecent(id);
         var deleted = await _contactService.DeleteAsync(id);
-        
+
         if (!deleted)
             return NotFound();
 

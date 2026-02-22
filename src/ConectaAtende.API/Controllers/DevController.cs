@@ -5,22 +5,34 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ConectaAtende.API.Controllers;
 
+/// <summary>
+/// Controller disponível APENAS em ambiente Development.
+/// Fornece endpoints auxiliares para geração de dados de teste.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class DevController : ControllerBase
 {
     private readonly IContactRepository _contactRepository;
     private readonly ContactService _contactService;
+    private readonly IWebHostEnvironment _environment;
 
-    public DevController(IContactRepository contactRepository, ContactService contactService)
+    public DevController(
+        IContactRepository contactRepository,
+        ContactService contactService,
+        IWebHostEnvironment environment)
     {
         _contactRepository = contactRepository;
         _contactService = contactService;
+        _environment = environment;
     }
 
     [HttpGet("seed")]
     public async Task<IActionResult> Seed([FromQuery] int count = 100)
     {
+        if (!_environment.IsDevelopment())
+            return NotFound();
+
         var random = new Random();
         var firstNames = new[] { "João", "Maria", "Pedro", "Ana", "Carlos", "Julia", "Lucas", "Fernanda", "Rafael", "Mariana" };
         var lastNames = new[] { "Silva", "Santos", "Oliveira", "Souza", "Costa", "Pereira", "Rodrigues", "Almeida", "Nascimento", "Lima" };
@@ -30,7 +42,7 @@ public class DevController : ControllerBase
             var firstName = firstNames[random.Next(firstNames.Length)];
             var lastName = lastNames[random.Next(lastNames.Length)];
             var name = $"{firstName} {lastName}";
-            
+
             var phoneCount = random.Next(1, 4);
             var phones = new List<string>();
             for (int j = 0; j < phoneCount; j++)

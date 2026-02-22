@@ -1,8 +1,13 @@
 using ConectaAtende.Application.DTOs;
 using ConectaAtende.Domain.Repositories;
 
-namespace ConectaAtende.Application.Services;
+namespace ConectaAtende.Infrastructure.Services;
 
+/// <summary>
+/// Implementação da lista de contatos recentes usando LinkedList.
+/// Responsabilidade na camada Infrastructure, conforme Clean Architecture.
+/// LinkedList permite inserção/remoção O(1) no início e no meio (com nó).
+/// </summary>
 public class RecentContactsService
 {
     private readonly IContactRepository _repository;
