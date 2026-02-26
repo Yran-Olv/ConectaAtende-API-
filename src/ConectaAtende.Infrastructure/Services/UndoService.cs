@@ -1,5 +1,6 @@
 using ConectaAtende.Domain.Entities;
 using ConectaAtende.Domain.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ConectaAtende.Infrastructure.Services;
 
@@ -23,12 +24,12 @@ public class UndoOperation
 /// </summary>
 public class UndoService
 {
-    private readonly IContactRepository _repository;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly Stack<UndoOperation> _undoStack = new();
 
-    public UndoService(IContactRepository repository)
+    public UndoService(IServiceScopeFactory serviceScopeFactory)
     {
-        _repository = repository;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
     public void RecordCreate(Contact contact)
@@ -70,28 +71,31 @@ public class UndoService
 
         var operation = _undoStack.Pop();
 
+        using var scope = _serviceScopeFactory.CreateScope();
+        var repository = scope.ServiceProvider.GetRequiredService<IContactRepository>();
+
         switch (operation.Type)
         {
             case UndoOperationType.Create:
                 if (operation.Contact != null)
-                    await _repository.DeleteAsync(operation.Contact.Id);
+                    await repository.DeleteAsync(operation.Contact.Id);
                 break;
 
             case UndoOperationType.Update:
                 if (operation.Contact != null)
                 {
-                    var existing = await _repository.GetByIdAsync(operation.Contact.Id);
+                    var existing = await repository.GetByIdAsync(operation.Contact.Id);
                     if (existing != null)
                     {
                         existing.Update(operation.Contact.Name, operation.Contact.Phones);
-                        await _repository.UpdateAsync(existing);
+                        await repository.UpdateAsync(existing);
                     }
                 }
                 break;
 
             case UndoOperationType.Delete:
                 if (operation.Contact != null)
-                    await _repository.AddAsync(operation.Contact);
+                    await repository.AddAsync(operation.Contact);
                 break;
         }
 

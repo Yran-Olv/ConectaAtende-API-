@@ -3,8 +3,8 @@ using ConectaAtende.Application.Services;
 using ConectaAtende.Domain.Entities;
 using ConectaAtende.Domain.Repositories;
 using ConectaAtende.Domain.Services;
-using ConectaAtende.Infrastructure.Repositories;
 using ConectaAtende.Infrastructure.Services;
+using ConectaAtende.UnitTests.TestHelpers;
 
 namespace ConectaAtende.UnitTests.Application;
 
@@ -17,8 +17,8 @@ public class TicketServiceTests
 
     public TicketServiceTests()
     {
-        _contactRepository = new InMemoryContactRepository();
-        _ticketRepository = new InMemoryTicketRepository();
+        _contactRepository = new TestContactRepository();
+        _ticketRepository = new TestTicketRepository();
         _triagePolicyService = new TriagePolicyService();
         _service = new TicketService(_ticketRepository, _contactRepository, _triagePolicyService);
     }

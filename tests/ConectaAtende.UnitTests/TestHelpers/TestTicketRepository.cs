@@ -1,9 +1,13 @@
 using ConectaAtende.Domain.Entities;
 using ConectaAtende.Domain.Repositories;
 
-namespace ConectaAtende.Infrastructure.Repositories;
+namespace ConectaAtende.UnitTests.TestHelpers;
 
-public class InMemoryTicketRepository : ITicketRepository
+/// <summary>
+/// Repositório em memória APENAS para testes unitários.
+/// Em produção, usar TicketRepository com EF Core.
+/// </summary>
+public class TestTicketRepository : ITicketRepository
 {
     private readonly Dictionary<Guid, Ticket> _tickets = new();
 

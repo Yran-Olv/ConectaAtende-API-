@@ -1,7 +1,7 @@
 using ConectaAtende.Domain.Entities;
 using ConectaAtende.Domain.Repositories;
-using ConectaAtende.Infrastructure.Repositories;
 using ConectaAtende.Infrastructure.Services;
+using ConectaAtende.UnitTests.TestHelpers;
 
 namespace ConectaAtende.UnitTests.Infrastructure;
 
@@ -12,8 +12,9 @@ public class UndoServiceTests
 
     public UndoServiceTests()
     {
-        _repository = new InMemoryContactRepository();
-        _undoService = new UndoService(_repository);
+        _repository = new TestContactRepository();
+        var scopeFactory = new TestServiceScopeFactory(_repository);
+        _undoService = new UndoService(scopeFactory);
     }
 
     [Fact]

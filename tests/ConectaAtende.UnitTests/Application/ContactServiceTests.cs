@@ -1,7 +1,7 @@
 using ConectaAtende.Application.DTOs;
 using ConectaAtende.Application.Services;
 using ConectaAtende.Domain.Repositories;
-using ConectaAtende.Infrastructure.Repositories;
+using ConectaAtende.UnitTests.TestHelpers;
 
 namespace ConectaAtende.UnitTests.Application;
 
@@ -12,7 +12,7 @@ public class ContactServiceTests
 
     public ContactServiceTests()
     {
-        _repository = new InMemoryContactRepository();
+        _repository = new TestContactRepository();
         _service = new ContactService(_repository);
     }
 

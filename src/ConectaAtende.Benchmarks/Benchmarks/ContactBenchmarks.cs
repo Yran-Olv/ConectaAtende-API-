@@ -1,8 +1,8 @@
 using BenchmarkDotNet.Attributes;
 using ConectaAtende.Application.DTOs;
 using ConectaAtende.Application.Services;
+using ConectaAtende.Benchmarks.TestHelpers;
 using ConectaAtende.Domain.Repositories;
-using ConectaAtende.Infrastructure.Repositories;
 
 namespace ConectaAtende.Benchmarks.Benchmarks;
 
@@ -17,7 +17,8 @@ public class ContactBenchmarks
     [GlobalSetup]
     public void Setup()
     {
-        _repository = new InMemoryContactRepository();
+        // Para benchmarks, usar repositório simplificado (em memória para performance)
+        _repository = new BenchmarkContactRepository();
         _contactService = new ContactService(_repository);
 
         // Pré-popular com dados para os benchmarks

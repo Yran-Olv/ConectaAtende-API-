@@ -1,6 +1,6 @@
 using ConectaAtende.Domain.Entities;
 using ConectaAtende.Domain.Repositories;
-using ConectaAtende.Infrastructure.Repositories;
+using ConectaAtende.UnitTests.TestHelpers;
 
 namespace ConectaAtende.UnitTests.Infrastructure;
 
@@ -10,7 +10,7 @@ public class InMemoryContactRepositoryTests
 
     public InMemoryContactRepositoryTests()
     {
-        _repository = new InMemoryContactRepository();
+        _repository = new TestContactRepository();
     }
 
     [Fact]

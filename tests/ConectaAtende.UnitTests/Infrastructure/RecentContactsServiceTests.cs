@@ -1,7 +1,7 @@
 using ConectaAtende.Domain.Entities;
 using ConectaAtende.Domain.Repositories;
-using ConectaAtende.Infrastructure.Repositories;
 using ConectaAtende.Infrastructure.Services;
+using ConectaAtende.UnitTests.TestHelpers;
 
 namespace ConectaAtende.UnitTests.Infrastructure;
 
@@ -12,8 +12,9 @@ public class RecentContactsServiceTests
 
     public RecentContactsServiceTests()
     {
-        _repository = new InMemoryContactRepository();
-        _service = new RecentContactsService(_repository, maxCapacity: 3);
+        _repository = new TestContactRepository();
+        var scopeFactory = new TestServiceScopeFactory(_repository);
+        _service = new RecentContactsService(scopeFactory, maxCapacity: 3);
     }
 
     private async Task<Guid> AddContactAsync(string name)

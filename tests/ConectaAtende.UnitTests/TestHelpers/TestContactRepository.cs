@@ -3,9 +3,13 @@ using System.Text;
 using ConectaAtende.Domain.Entities;
 using ConectaAtende.Domain.Repositories;
 
-namespace ConectaAtende.Infrastructure.Repositories;
+namespace ConectaAtende.UnitTests.TestHelpers;
 
-public class InMemoryContactRepository : IContactRepository
+/// <summary>
+/// Repositório em memória APENAS para testes unitários.
+/// Em produção, usar ContactRepository com EF Core.
+/// </summary>
+public class TestContactRepository : IContactRepository
 {
     private readonly Dictionary<Guid, Contact> _contacts = new();
     private readonly Dictionary<string, HashSet<Guid>> _nameIndex = new();

@@ -1,5 +1,6 @@
 using ConectaAtende.Application.DTOs;
 using ConectaAtende.Domain.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ConectaAtende.Infrastructure.Services;
 
@@ -10,13 +11,13 @@ namespace ConectaAtende.Infrastructure.Services;
 /// </summary>
 public class RecentContactsService
 {
-    private readonly IContactRepository _repository;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly LinkedList<Guid> _recentIds = new();
     private readonly int _maxCapacity;
 
-    public RecentContactsService(IContactRepository repository, int maxCapacity = 10)
+    public RecentContactsService(IServiceScopeFactory serviceScopeFactory, int maxCapacity = 10)
     {
-        _repository = repository;
+        _serviceScopeFactory = serviceScopeFactory;
         _maxCapacity = maxCapacity;
     }
 
@@ -50,9 +51,12 @@ public class RecentContactsService
         var ids = _recentIds.Take(limit).ToList();
         var contacts = new List<ContactDto>();
 
+        using var scope = _serviceScopeFactory.CreateScope();
+        var repository = scope.ServiceProvider.GetRequiredService<IContactRepository>();
+
         foreach (var id in ids)
         {
-            var contact = await _repository.GetByIdAsync(id);
+            var contact = await repository.GetByIdAsync(id);
             if (contact != null)
             {
                 contacts.Add(new ContactDto

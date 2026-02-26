@@ -78,3 +78,9 @@ $RECYCLE.BIN/
 
 # Mac
 .DS_Store
+
+# SQLite Database
+*.db
+*.db-shm
+*.db-wal
+ConectaAtende.db
